@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,6 +17,10 @@ public class Invoice {
 
     private String description;
     private Long total;
+
+    //? Se leeria como, muchas facturas hacia 1 solo cliente
+    @ManyToOne
+    private Client client;
 
     public Invoice() {}
 
@@ -37,7 +42,9 @@ public class Invoice {
         this.total = total;
     }
 
-    
-
+    @Override
+    public String toString() {
+        return "{id=" + id + ", description=" + description + ", total=" + total + ", client=" + client + "}";
+    }
     
 }
