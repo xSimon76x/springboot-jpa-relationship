@@ -22,7 +22,8 @@ public class Client {
     private String name;
     private String lastname;
 
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    //El orphanRemoval borra todos los registros de address huerfanos, que quedaron sin relacion hacia cliente
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true) // Es para que cuando se elimine/Inserte un cliente tambien necesite crear o eliminar la direccion
     private List<Address> addresses;
 
     public Client() {
@@ -49,6 +50,14 @@ public class Client {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
     }
 
     @Override
