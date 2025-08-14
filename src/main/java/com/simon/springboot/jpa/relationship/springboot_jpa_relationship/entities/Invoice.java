@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -20,6 +21,11 @@ public class Invoice {
 
     //? Se leeria como, muchas facturas hacia 1 solo cliente
     @ManyToOne
+    //* Se usa para definir nombres de columnas que son llaves foraneas
+    //* Si se cambia este name, saldran varios errores, lo mejor seria 
+    //* eliminar el campo o la tabla y dejar que el spring los cree denuevo pero 
+    //* con el nuevo nombre que definimos  
+    @JoinColumn(name = "id_cliente_temp") //? por defecto si no se define, seria el nombre de la variable concatenado con "_id" -> client_id
     private Client client;
 
     public Invoice() {}

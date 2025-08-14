@@ -27,7 +27,7 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		manyToOneFindByIdClient();
+		manyToOne();
 	}
 
 	public void manyToOne() {
