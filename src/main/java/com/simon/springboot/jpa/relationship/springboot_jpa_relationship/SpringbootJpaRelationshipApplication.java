@@ -30,7 +30,35 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		removeAddress();
+		removeAddressFindById();
+	}
+
+	@Transactional
+	public void removeAddressFindById() {
+		// Client client = new Client("Fran", "Moras");
+		Optional<Client> optionalClient = clientRepository.findById(2L);
+
+		optionalClient.ifPresent( client -> {
+			Address address1 = new Address("El verjel", 1234);
+			Address address2 = new Address("Vasco de gama", 5928);
+		
+			client.setAddresses(Arrays.asList(address1, address2));
+	
+			clientRepository.save(client);
+	
+			System.out.println(client);
+
+			//*Para evitar recarga tardia del getAddresses y que de error el remove(), se usa el findOne 
+			//*Que es un query personalizada */
+			Optional<Client> optionalClient2 = clientRepository.findOne(2L); 
+			optionalClient2.ifPresent(c -> {
+				c.getAddresses().remove(0);
+				clientRepository.save(c);
+				System.out.println(c);
+			});
+
+		});
+
 	}
 
 	@Transactional
