@@ -36,6 +36,13 @@ public class Client {
     )
     private List<Address> addresses;
 
+    @OneToMany( 
+        cascade = CascadeType.ALL, 
+        orphanRemoval = true, 
+        mappedBy = "client" //? Este "client", es del atributo que tiene Invoice en su clase, para hacer la relacion
+    )
+    private List<Invoice> invoices;
+
     public Client() {
         addresses = new ArrayList<>(); // inicializar el address como un array vacio
     }
@@ -70,9 +77,17 @@ public class Client {
         this.addresses = addresses;
     }
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+
     @Override
     public String toString() {
-        return "{id=" + id + ", name=" + name + ", lastname=" + lastname + ", addresses=" + addresses + "}";
+        return "{id=" + id + ", name=" + name + ", lastname=" + lastname + ", addresses=" + addresses + ", invoices=" + invoices + "}";
     } 
 
     

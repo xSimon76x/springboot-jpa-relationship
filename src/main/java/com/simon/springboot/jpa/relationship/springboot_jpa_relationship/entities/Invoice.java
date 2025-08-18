@@ -58,7 +58,9 @@ public class Invoice {
 
     @Override
     public String toString() {
-        return "{id=" + id + ", description=" + description + ", total=" + total + ", client=" + client + "}";
+        //? para relacion que hay entre invoice y client, no puede haber en el toString
+        //? una invocacion de sus datos en ambos lados, solo debe estar en un lado
+        return "{id=" + id + ", description=" + description + ", total=" + total + "}";
     }
     
 }
