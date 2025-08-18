@@ -1,5 +1,6 @@
 package com.simon.springboot.jpa.relationship.springboot_jpa_relationship;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,22 +38,21 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Transactional
 	public void oneToManyInvoiceBidireccional() {
+
+		List<Invoice> invoices = List.of(
+            new Invoice("compras de la casa", 5000L),
+            new Invoice("compras de la oficina", 8000L)
+        );
+
 		Client client = new Client("Fran", "Moras");
-
-		Invoice invoice1 = new Invoice("compras de la casa", 5000L);
-		Invoice invoice2 = new Invoice("compras de la oficina", 8000L);
-
-		List<Invoice> invoices = new ArrayList<>();
-		invoices.add(invoice1); 
-		invoices.add(invoice2);
 		client.setInvoices(invoices);
-		
-		invoice1.setClient(client);
-		invoice2.setClient(client);
-		
-		clientRepository.save(client);
 
-		System.out.println(client);
+		invoices.forEach((invoice) -> invoice.setClient(client));
+ 
+ 
+
+		Client clientDB = clientRepository.save(client);
+        System.out.printf("Result Client: %s", clientDB);  
 	}
 
 	@Transactional
