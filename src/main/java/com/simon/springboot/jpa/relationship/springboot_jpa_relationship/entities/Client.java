@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -24,6 +25,7 @@ public class Client {
 
     //El orphanRemoval borra todos los registros de address huerfanos, que quedaron sin relacion hacia cliente
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true) // Es para que cuando se elimine/Inserte un cliente tambien necesite crear o eliminar la direccion
+    @JoinColumn( name = "client_id") // Con esto, en la tabla Address quedara una forengkey apuntando a esta tabla clients
     private List<Address> addresses;
 
     public Client() {
