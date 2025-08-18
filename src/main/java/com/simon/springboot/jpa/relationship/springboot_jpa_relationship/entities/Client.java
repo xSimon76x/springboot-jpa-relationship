@@ -9,8 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "clients")
@@ -25,7 +27,13 @@ public class Client {
 
     //El orphanRemoval borra todos los registros de address huerfanos, que quedaron sin relacion hacia cliente
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true) // Es para que cuando se elimine/Inserte un cliente tambien necesite crear o eliminar la direccion
-    @JoinColumn( name = "client_id") // Con esto, en la tabla Address quedara una forengkey apuntando a esta tabla clients
+    // @JoinColumn( name = "client_id") // Con esto, en la tabla Address quedara una forengkey apuntando a esta tabla clients
+    @JoinTable(
+        name = "tbl_clientes_to_direcciones", //? nombre de la tabla intermedia
+        joinColumns = @JoinColumn(name = "id_cliente"), //? nombre de la FK en la tabla intermedia tbl_clientes_to_direcciones
+        inverseJoinColumns = @JoinColumn(name = "id_direcciones"), //? PK de la tabla de direcciones que estara enlazada a esta tabla intermedia
+        uniqueConstraints = @UniqueConstraint( columnNames = {"id_direcciones"}) //? PK de la tabla intermedia tbl_clientes_to_direcciones
+    )
     private List<Address> addresses;
 
     public Client() {
