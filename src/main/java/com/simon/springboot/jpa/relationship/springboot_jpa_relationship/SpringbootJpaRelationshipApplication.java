@@ -30,7 +30,29 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		oneToManyFindById();
+		removeAddress();
+	}
+
+	@Transactional
+	public void removeAddress() {
+		Client client = new Client("Fran", "Moras");
+
+		Address address1 = new Address("El verjel", 1234);
+		Address address2 = new Address("Vasco de gama", 5928);
+	
+		client.getAddresses().add(address1);
+		client.getAddresses().add(address2);
+
+		clientRepository.save(client);
+
+		System.out.println(client);
+
+		Optional<Client> optionalClient = clientRepository.findById(3L);
+		optionalClient.ifPresent(c -> {
+			c.getAddresses().remove(0);
+			clientRepository.save(c);
+			System.out.println(c);
+		});
 	}
 
 	@Transactional
