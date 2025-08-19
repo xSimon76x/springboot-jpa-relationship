@@ -3,8 +3,10 @@ package com.simon.springboot.jpa.relationship.springboot_jpa_relationship;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -33,24 +35,44 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		oneToManyInvoiceBidireccional();
+		oneToManyInvoiceBidireccionalFindById();
+	}
+
+	@Transactional
+	public void oneToManyInvoiceBidireccionalFindById() {
+
+		Optional<Client> client = clientRepository.findOne(1L);
+
+		client.ifPresent( c -> {
+			
+			Invoice invoice1 = new Invoice("compras de la casa", 5000L);
+			Invoice invoice2 = new Invoice("compras de oficina", 3230L);
+
+			c.addInvoice(invoice1).addInvoice(invoice2);
+
+			clientRepository.save(c);
+
+			System.out.println(c);
+			
+		});
 	}
 
 	@Transactional
 	public void oneToManyInvoiceBidireccional() {
 
-		List<Invoice> invoices = List.of(
-            new Invoice("compras de la casa", 5000L),
-            new Invoice("compras de la oficina", 8000L)
-        );
-
+		
+		
 		Client client = new Client("Fran", "Moras");
-		client.setInvoices(invoices);
+        Invoice invoices1 = new Invoice("compras de la casa", 5000L);
+        Invoice invoices2 = new Invoice("compras de la oficina", 8000L);
+		invoices1.setClient(client);
+		invoices2.setClient(client);
 
-		invoices.forEach((invoice) -> invoice.setClient(client));
+		Set<Invoice> invoicesSet = new HashSet<>();
+		invoicesSet.add(invoices1);
+		invoicesSet.add(invoices2);
+		client.setInvoices(invoicesSet);
  
- 
-
 		Client clientDB = clientRepository.save(client);
         System.out.printf("Result Client: %s", clientDB);  
 	}
@@ -64,7 +86,10 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 			Address address1 = new Address("El verjel", 1234);
 			Address address2 = new Address("Vasco de gama", 5928);
 		
-			client.setAddresses(Arrays.asList(address1, address2));
+			Set<Address> addresses = new HashSet<>();
+			addresses.add(address1);
+			addresses.add(address2);
+			client.setAddresses(addresses);
 	
 			clientRepository.save(client);
 	
@@ -72,7 +97,7 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 			//*Para evitar recarga tardia del getAddresses y que de error el remove(), se usa el findOne 
 			//*Que es un query personalizada */
-			Optional<Client> optionalClient2 = clientRepository.findOne(2L); 
+			Optional<Client> optionalClient2 = clientRepository.findOneWithAddresses(2L); 
 			optionalClient2.ifPresent(c -> {
 				c.getAddresses().remove(0);
 				clientRepository.save(c);
@@ -114,7 +139,10 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 			Address address1 = new Address("El verjel", 1234);
 			Address address2 = new Address("Vasco de gama", 5928);
 		
-			client.setAddresses(Arrays.asList(address1, address2));
+			Set<Address> addresses = new HashSet<>();
+			addresses.add(address1);
+			addresses.add(address2);
+			client.setAddresses(addresses);
 	
 			clientRepository.save(client);
 	

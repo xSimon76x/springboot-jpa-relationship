@@ -8,6 +8,12 @@ import com.simon.springboot.jpa.relationship.springboot_jpa_relationship.entitie
 
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    @Query("select c from Client c join fetch c.addresses") //? para evitar usar esa propiedad en el aplication.properties
+    @Query("select c from Client c left join fetch c.addresses where c.id=?1") //? para evitar usar esa propiedad en el aplication.properties
+    Optional<Client> findOneWithAddresses(Long id);
+
+    @Query("select c from Client c left join fetch c.invoices where c.id=?1") //? para evitar usar esa propiedad en el aplication.properties
+    Optional<Client> findOneWithInvoices(Long id);
+
+    @Query("select c from Client c left join fetch c.invoices left join fetch c.addresses where c.id=?1") //? para evitar usar esa propiedad en el aplication.properties
     Optional<Client> findOne(Long id);
 }

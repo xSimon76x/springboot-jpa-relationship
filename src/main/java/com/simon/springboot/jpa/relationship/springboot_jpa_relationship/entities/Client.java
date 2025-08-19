@@ -1,7 +1,7 @@
 package com.simon.springboot.jpa.relationship.springboot_jpa_relationship.entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,17 +34,18 @@ public class Client {
         inverseJoinColumns = @JoinColumn(name = "id_direcciones"), //? PK de la tabla de direcciones que estara enlazada a esta tabla intermedia
         uniqueConstraints = @UniqueConstraint( columnNames = {"id_direcciones"}) //? PK de la tabla intermedia tbl_clientes_to_direcciones
     )
-    private List<Address> addresses;
+    private Set<Address> addresses;
 
     @OneToMany( 
         cascade = CascadeType.ALL, 
         orphanRemoval = true, 
         mappedBy = "client" //? Este "client", es del atributo que tiene Invoice en su clase, para hacer la relacion
     )
-    private List<Invoice> invoices;
+    private Set<Invoice> invoices;
 
     public Client() {
-        addresses = new ArrayList<>(); // inicializar el address como un array vacio
+        addresses = new HashSet<>(); // inicializar el address como un array vacio
+        invoices = new HashSet<>(); // inicializar el address como un array vacio
     }
 
     public Client(String name, String lastname) {
@@ -69,19 +70,19 @@ public class Client {
         this.lastname = lastname;
     }
 
-    public List<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setAddresses(List<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 
-    public List<Invoice> getInvoices() {
+    public Set<Invoice> getInvoices() {
         return invoices;
     }
 
-    public void setInvoices(List<Invoice> invoices) {
+    public void setInvoices(Set<Invoice> invoices) {
         this.invoices = invoices;
     }
 
@@ -93,7 +94,12 @@ public class Client {
 
     @Override
     public String toString() {
-        return "{id=" + id + ", name=" + name + ", lastname=" + lastname + ", addresses=" + addresses + ", invoices=" + invoices + "}";
+        return "{id=" + id + 
+            ", name=" + name + 
+            ", lastname=" + lastname + 
+            ", invoices=" + invoices 
+            // ", addresses=" + addresses + 
+            + "}";
     }
 
     public static Object builder() {
