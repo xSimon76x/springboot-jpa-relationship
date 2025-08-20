@@ -5,12 +5,14 @@ import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -42,6 +44,14 @@ public class Client {
         mappedBy = "client" //? Este "client", es del atributo que tiene Invoice en su clase, para hacer la relacion
     )
     private Set<Invoice> invoices;
+
+    @OneToOne(
+        fetch = FetchType.LAZY, 
+        cascade = CascadeType.ALL, 
+        orphanRemoval = true, 
+        mappedBy = "client" //* mappedBy no es compatible con JoinColumn, 
+    )
+    private ClientDetails clientDetails;
 
     public Client() {
         addresses = new HashSet<>(); // inicializar el address como un array vacio
@@ -92,13 +102,21 @@ public class Client {
         return this;
     }
 
+    public ClientDetails getClientDetails() {
+        return clientDetails;
+    }
+
+    public void setClientDetails(ClientDetails clientDetails) {
+        this.clientDetails = clientDetails;
+    }
+
     @Override
     public String toString() {
         return "{id=" + id + 
             ", name=" + name + 
             ", lastname=" + lastname + 
-            ", invoices=" + invoices 
-            // ", addresses=" + addresses + 
+            ", invoices=" + invoices +
+            ", clientDetails=" + clientDetails
             + "}";
     }
 

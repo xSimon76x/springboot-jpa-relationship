@@ -21,7 +21,9 @@ public class ClientDetails {
     private Integer points;
 
     @OneToOne
-    // @JoinColumn(name = "cliente_id") //?Se puede definir un nuevo nombre para esta FK pero se deberan crear de nuevo las tablas segun el curso
+    @JoinColumn( //?Join column es para quien es duena de la relacion, pero que es la hija
+        name = "id_cliente" //?Se puede definir un nuevo nombre para esta FK pero se deberan crear de nuevo las tablas segun el curso
+    )
     private Client client;
 
     public ClientDetails() { }
