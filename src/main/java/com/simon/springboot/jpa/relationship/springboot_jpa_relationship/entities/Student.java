@@ -8,8 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "students")
@@ -23,6 +26,14 @@ public class Student {
     private String lastname;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+        name = "tbl_alumnos_cursos", //? nombre tabla intermedia
+        joinColumns = @JoinColumn(name = "alumno_id"), //? Definir nombre de la PK de esta clase a considerar para la relacion
+        inverseJoinColumns = @JoinColumn(name = "curso_id"), //? Definir nombre de la PK de la otra clase a relacionar
+        uniqueConstraints = @UniqueConstraint(
+            columnNames = {"alumno_id", "curso_id"}
+        ) //? Con esto decimos, que no pueden haber registros de un mismo alumno con mis curso repetidos, deben ser unicos
+    )
     private Set<Course> courses;
 
     public Student() {
