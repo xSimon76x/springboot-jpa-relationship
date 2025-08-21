@@ -50,7 +50,53 @@ public class SpringbootJpaRelationshipApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		manyToManyRemove();
+	}
+
+	@Transactional
+	public void manyToManyRemove() {
+
+		manyToMany();
+
+		Optional<Student> studentOptionalDB = studentRepository.findOneWithCourses(3L);
+
+		if (studentOptionalDB.isPresent()) {
+			Student studentDB = studentOptionalDB.get();
+
+			Optional<Course> courseOptionalDb = courseRepository.findById(3L);
+
+			if (courseOptionalDb.isPresent()) {
+				Course courseDB = courseOptionalDb.get();
+				studentDB.getCourses().remove(courseDB);
+				studentRepository.save(studentDB);
+				System.out.println(studentDB);
+			}
+		}
+
+
+	}
+
+	@Transactional
+	public void manyToManyRemoveById() {
+
 		manyToManyFindById();
+
+		Optional<Student> studentOptionalDB = studentRepository.findOneWithCourses(1L);
+
+		if (studentOptionalDB.isPresent()) {
+			Student studentDB = studentOptionalDB.get();
+
+			Optional<Course> courseOptionalDb = courseRepository.findById(2L);
+
+			if (courseOptionalDb.isPresent()) {
+				Course courseDB = courseOptionalDb.get();
+				studentDB.getCourses().remove(courseDB);
+				studentRepository.save(studentDB);
+				System.out.println(studentDB);
+			}
+		}
+
+
 	}
 
 	@Transactional
